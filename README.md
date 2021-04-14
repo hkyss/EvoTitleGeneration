@@ -18,7 +18,7 @@ version 1.0
  * @internal    @modx_category Content
  * @internal    @installset base
  * @author      hkyss [hkyss.off.dev@gmail.com]
- * @lastupdate  09.11.2020
+ * @lastupdate  14.04.2021
  */
 
 echo include_once MODX_BASE_PATH.'assets/snippets/TitleGeneration/snippet.TitleGeneration.php';
