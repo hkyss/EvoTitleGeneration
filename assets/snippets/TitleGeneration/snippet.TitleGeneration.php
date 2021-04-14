@@ -1,20 +1,7 @@
 <?php
-/**
- * TitleGeneration
- *
- * Site page title generation
- *
- * @category    snippet
- * @version     1.0
- * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License (GPL)
- * @internal    @properties
- * @internal    @modx_category Content
- * @internal    @installset base
- * @author      hkyss [hkyss.off.dev@gmail.com]
- * @lastupdate  09.11.2020
- */
-
-if(!defined('MODX_BASE_PATH')){die('What are you doing? Get out of here!');}
+if(!defined('MODX_BASE_PATH')) {
+  die('Something was wrong.');
+}
 
 $documentObject = $modx->documentObject;
 
@@ -22,12 +9,20 @@ if(!empty($documentObject['longtitle'])) {
     return $documentObject['longtitle'];
 }
 
-if((int)$documentObject['id'] === 1 || (int)$documentObject['parent'] === 0 || (int)$documentObject['parent'] === 221 || (int)$documentObject['parent'] === 222) {
+if((int)$documentObject['id'] === 1 || (int)$documentObject['parent'] === 0) {
     return $documentObject['pagetitle'];
 }
 else {
     $documentObject['domain'] = $modx->config['valid_hostnames'];
-    $documentObject['parent_pagetitle'] = $modx->runSnippet('DocInfo',array('docid'=>$documentObject['parent'],'field'=>'pagetitle'));
+
+    $parent_info = $modx->getDocument((int)$documentObject['parent']);
+    if(!empty($parent_info)) {
+      foreach($parent_info as $item_key => $item) {
+        $documentObject['parent_'.$item_key] = $item;
+        unset($parent_info[$item_key]);
+      }
+    }
+
     $mask = isset($mask) ? $mask : '[+pagetitle+] — [+parent_pagetitle+] [+domain+]';
 
     return $modx->parseText($mask,$documentObject);
